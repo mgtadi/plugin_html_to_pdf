@@ -68,11 +68,21 @@ class HtmlToPdfConverter {
             "LANDSCAPE" -> mediaSize = mediaSize.asLandscape()
             "PORTRAIT" -> mediaSize = mediaSize.asPortrait()
         }
-
+        var margins = PrintAttributes.Margins(
+                            Double.valueOf(5 * 1000.0).intValue(),
+                            Double.valueOf(5 * 1000.0 / 72.0).intValue(),
+                            Double.valueOf(5 * 1000.0 / 72.0).intValue(),
+                            Double.valueOf(5 * 1000.0 / 72.0).intValue());
+        if (printSize == "mm80") {
+            mediaSize = PrintAttributes.MediaSize("flutter_printing", "Provided size",
+                        Double.valueOf(227 * 1000.0 / 72.0).intValue(),
+                        Double.valueOf(105 * 1000.0 / 72.0).intValue());
+        }
+        
         val attributes = PrintAttributes.Builder()
             .setMediaSize(mediaSize)
             .setResolution(PrintAttributes.Resolution("pdf", "pdf", 300, 300))
-            .setMinMargins(PrintAttributes.Margins.NO_MARGINS).build()
+            .setMinMargins(margins).build()
 
         val printer = PdfPrinter(attributes)
         var adapter = webView.createPrintDocumentAdapter()
